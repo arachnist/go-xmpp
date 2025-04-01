@@ -166,7 +166,6 @@ func TestClient_SendIQ(t *testing.T) {
 	// Handler for Mock server
 	h := func(t *testing.T, sc *ServerConn) {
 		handlerClientConnectSuccess(t, sc)
-		discardPresence(t, sc)
 		respondToIQ(t, sc)
 		done <- struct{}{}
 	}
@@ -216,7 +215,6 @@ func TestClient_SendIQFail(t *testing.T) {
 	// Handler for Mock server
 	h := func(t *testing.T, sc *ServerConn) {
 		handlerClientConnectSuccess(t, sc)
-		discardPresence(t, sc)
 		respondToIQ(t, sc)
 		done <- struct{}{}
 	}
@@ -266,7 +264,6 @@ func TestClient_SendRaw(t *testing.T) {
 	// Handler for Mock server
 	h := func(t *testing.T, sc *ServerConn) {
 		handlerClientConnectSuccess(t, sc)
-		discardPresence(t, sc)
 		respondToIQ(t, sc)
 		closeConn(t, sc)
 		done <- struct{}{}

@@ -191,7 +191,6 @@ func Test_StreamManagementResume(t *testing.T) {
 		sendFeaturesStreamManagment(t, sc) // Send post auth features
 		bind(t, sc)
 		enableStreamManagement(t, sc, false, true)
-		discardPresence(t, sc)
 		serverDone <- struct{}{}
 	})
 
@@ -363,9 +362,6 @@ func Test_SendStanzaQueueWithSM(t *testing.T) {
 		sendFeaturesStreamManagment(t, sc) // Send post auth features
 		bind(t, sc)
 		enableStreamManagement(t, sc, false, true)
-
-		// Ignore the initial presence sent to the server by the client so we can move on to the next packet.
-		discardPresence(t, sc)
 
 		// Used here to silently discard the IQ sent by the client, in order to later trigger a resend
 		skipPacket(t, sc)
