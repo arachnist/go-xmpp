@@ -17,7 +17,7 @@ TODO support ability to put Raw payload inside IQ
 
 // IQ implements RFC 6120 - A.5 Client Namespace (a part)
 type IQ struct { // Info/Query
-	XMLName xml.Name `xml:"iq"`
+	XMLName xml.Name `xml:"jabber:client iq"`
 	// MUST have a ID
 	Attrs
 	// We can only have one payload on IQ:

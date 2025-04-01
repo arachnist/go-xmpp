@@ -17,6 +17,14 @@ type Credential struct {
 	mechanisms []string
 }
 
+func Anonymous() Credential {
+	credential := Credential{
+		secret: "ANONYMOUS",
+		mechanisms: []string{"ANONYMOUS"},
+	}
+	return credential
+}
+
 func Password(pwd string) Credential {
 	credential := Credential{
 		secret:     pwd,
@@ -49,10 +57,46 @@ func authSASL(socket io.ReadWriter, decoder *xml.Decoder, f stanza.StreamFeature
 	case "PLAIN", "X-OAUTH2":
 		// TODO: Implement other type of SASL mechanisms
 		return authPlain(socket, decoder, matchingMech, user, credential.secret)
+	case "ANONYMOUS":
+		return authAnonymous(socket, decoder, matchingMech)
 	default:
 		err := fmt.Errorf("no matching authentication (%v) supported by server: %v", credential.mechanisms, f.Mechanisms.Mechanism)
 		return NewConnError(err, true)
 	}
+}
+
+func authAnonymous(socket io.ReadWriter, decoder *xml.Decoder, mech string) error {
+	a := stanza.SASLAuth{
+		Mechanism: mech,
+	}
+
+	data, err := xml.Marshal(a)
+	if err != nil {
+		return err
+	}
+	n, err := socket.Write(data)
+	if err != nil {
+		return err
+	} else if n == 0 {
+		return errors.New("failed to write authSASL nonza to socket : wrote 0 bytes")
+	}
+
+	// Next message should be either success or failure.
+	val, err := stanza.NextPacket(decoder)
+	if err != nil {
+		return err
+	}
+
+	switch v := val.(type) {
+	case stanza.SASLSuccess:
+	case stanza.SASLFailure:
+		// v.Any is type of sub-element in failure, which gives a description of what failed.
+		err := errors.New("auth failure: " + v.Any.Local)
+		return NewConnError(err, true)
+	default:
+		return errors.New("expected SASL success or failure, got " + v.Name())
+	}
+	return err
 }
 
 // Plain authentication: send base64-encoded \x00 user \x00 password
