@@ -10,7 +10,7 @@ import (
 
 // Presence implements RFC 6120 - A.5 Client Namespace (a part)
 type Presence struct {
-	XMLName xml.Name `xml:"presence"`
+	XMLName xml.Name `xml:"jabber:client presence"`
 	Attrs
 	Show       PresenceShow    `xml:"show,omitempty"`
 	Status     string          `xml:"status,omitempty"`
