@@ -47,7 +47,8 @@ const (
 	StateSessionEstablished
 	StateStreamError
 	StatePermanentError
-	InitialPresence = "<presence/>"
+	InitialPresence = `<presence to="hackcenter-0fa0asdhgkjds@conference.meet.ffmuc.net/3344bf4a" xmlns="jabber:client"><x xmlns="http://jabber.org/protocol/muc"/><stats-id>Joy-4gA</stats-id><region id="ffmuc-de1" xmlns="http://jitsi.org/jitsi-meet"/><c hash="sha-1" node="https://jitsi.org/jitsi-meet" ver="ZjoRESHG8S3zyis9xCdYpFmbThk=" xmlns="http://jabber.org/protocol/caps"/><jitsi_participant_region>ffmuc-de1</jitsi_participant_region><videomuted>true</videomuted><audiomuted>true</audiomuted><jitsi_participant_codecType></jitsi_participant_codecType><nick xmlns="http://jabber.org/protocol/nick">test</nick></presence>`
+
 )
 
 // Event is a structure use to convey event changes related to client state. This
